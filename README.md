@@ -1,6 +1,6 @@
 # 1. Criar e ativar venv
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1  # Windows
+### python -m venv .venv
+### .\.venv\Scripts\Activate.ps1  # Windows
 
 # 2. Instalar dependências
 pip install -r requirements.txt
