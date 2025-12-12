@@ -1,0 +1,26 @@
+// prisma/schema.prisma
+generator client {
+  provider  = "prisma-client-py"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ShoppingList {
+  id        Int     @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now())
+  items     Item[]
+}
+
+model Item {
+  id           Int     @id @default(autoincrement())
+  name         String
+  quantity     Int     @default(1)
+  checked      Boolean @default(false)
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id])
+  shoppingListId Int
+  createdAt    DateTime @default(now())
+}

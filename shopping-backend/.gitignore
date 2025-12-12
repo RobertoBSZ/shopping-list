@@ -1,0 +1,17 @@
+node_modules
+# Keep environment variables out of version control
+.env
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.env
+.venv/
+.env/
+
+# VS Code
+.vscode/
+
+# Prisma
+prisma/__pycache__/
+prisma/client/
