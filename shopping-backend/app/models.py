@@ -8,7 +8,10 @@ class ListCreate(BaseModel):
 
 class ListRead(BaseModel):
     id: int
-    title: str  # antes era name
+    title: str
+    createdAt: str
+    itemsCount: int
+
 
 class ItemCreate(BaseModel):
     name: str

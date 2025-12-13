@@ -17,18 +17,43 @@ async def create_list(payload: ListCreate):
     return ListRead(id=shopping_list.id, title=shopping_list.title)
 
 # READ ALL
-@router.get("/", response_model=List[ListRead])
+@router.get("/")
 async def get_lists():
-    lists = await prisma.shoppinglist.find_many()
-    return [ListRead(id=l.id, title=l.title) for l in lists]
+    lists = await prisma.shoppinglist.find_many(
+        include={
+            "items": True
+        }
+    )
 
+    print("LISTS BACKEND:", lists)
+
+    result = []
+    for lst in lists:
+        result.append({
+            "id": lst.id,
+            "title": lst.title,
+            "createdAt": lst.createdAt,
+            "itemsCount": len(lst.items),
+        })
+
+    return result  # ⬅️ ISSO É CRÍTICO
 # READ ONE
 @router.get("/{list_id}", response_model=ListRead)
 async def get_list(list_id: int):
-    shopping_list = await prisma.shoppinglist.find_unique(where={"id": list_id})
-    if not shopping_list:
+    lst = await prisma.shoppinglist.find_unique(
+        where={"id": list_id},
+        include={"items": True}
+    )
+
+    if not lst:
         raise HTTPException(status_code=404, detail="Shopping list not found")
-    return ListRead(id=shopping_list.id, title=shopping_list.title)
+
+    return ListRead(
+        id=lst.id,
+        title=lst.title,
+        createdAt=lst.createdAt.isoformat(),
+        itemsCount=len(lst.items)
+    )
 
 # UPDATE
 @router.put("/{list_id}", response_model=ListRead)
